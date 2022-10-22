@@ -1,12 +1,13 @@
 /** @format */
 
 import BankAccount from './bank-account';
+import { AcccountSettings, AccountInfo } from './interfaces';
 
 class SavingAccount extends BankAccount {
   private interestRate: number;
   accountType: 'Savings';
 
-  constructor(accountSettings: any) {
+  constructor(accountSettings: AcccountSettings) {
     super(accountSettings);
     this.interestRate = accountSettings.interestRate;
   }
@@ -16,8 +17,11 @@ class SavingAccount extends BankAccount {
     this.solde += nvsomme;
   }
 
-  getAccountInfo() {
-    return {};
+  getAccountInfo(): AccountInfo {
+    return {
+      routingNumber: 1,
+      bankNumber: 2,
+    };
   }
 
   private addInterest() {

@@ -1,12 +1,12 @@
 /** @format */
 
-import { AccountList } from './styles/scripts/account-list';
+import { AccountList } from './scripts/account-list';
 /** @format */
 
-import BankAccount from './styles/scripts/bank-account';
-import CheckingAccount from './styles/scripts/checking-account';
-import Renderer from './styles/scripts/renreder';
-import SavingAccount from './styles/scripts/saving-account';
+import BankAccount from './scripts/bank-account';
+import CheckingAccount from './scripts/checking-account';
+import Renderer from './scripts/renreder';
+import SavingAccount from './scripts/saving-account';
 
 // Main
 // 1 - Creer des compte

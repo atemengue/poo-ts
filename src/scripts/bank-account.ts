@@ -1,12 +1,14 @@
 /** @format */
 
-abstract class BankAccount {
+import { Account, AcccountSettings, AccountInfo } from './interfaces';
+
+abstract class BankAccount implements Account {
   private _solde = 0;
   id: number;
   title: string;
   abstract accountType: string;
 
-  constructor(accountSettings: any) {
+  constructor(accountSettings: AcccountSettings) {
     (this.id = accountSettings.id),
       (this.title = accountSettings.title),
       (this._solde = accountSettings.solde);
@@ -24,7 +26,7 @@ abstract class BankAccount {
     return this._solde;
   }
 
-  abstract getAccountInfo(): any;
+  abstract getAccountInfo(): AccountInfo;
 
   set solde(val: number) {
     if (val >= 0) {

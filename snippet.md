@@ -84,3 +84,17 @@ accList.add(this.savingsAccount);
         }
         this.renderAccount(this.currentAccount);
     }
+
+   <div class="collapse navbar-collapse" id="navbarText">
+          <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+              <a class="nav-link" href="#" onclick="main.changeView('checking')"
+                >Compte courant</a
+              >
+            </li>
+            <li class="nav-item active">
+              <a class="nav-link" href="#" onclick="main.changeView('savings')"
+                >Compte Epargne</a
+              >
+            </li>
+          </ul>

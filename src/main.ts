@@ -1,40 +1,55 @@
 /** @format */
 
-// object literal
-const objLiteral = {
-  solde: 40000,
-};
+import CheckingAccount from './styles/scripts/checking-account';
+import Renderer from './styles/scripts/renreder';
 
-// creation d'un objet avec une classe
-class ClassObject {
-  solde = 1000;
+// Main
+// 1 - Creation des compte
+// 2 - Affichages des comptes
+
+class Main {
+  public checkingAccount: CheckingAccount;
+  // creation des comptes
+  constructor() {
+    this.checkingAccount = new CheckingAccount('Hermine Claudia');
+    this.renderAccount();
+  }
+
+  // affichages des informations du compte
+  renderAccount() {
+    const html = `
+        <h2>Bienvenu UBA Bank!</h2>
+        <h3>Compte Courant</h3>
+        <br />
+        <span class="label">Client:</span> ${this.checkingAccount.title}
+        <br />
+        <span class="label">Solde:</span> ${this.checkingAccount.solde.toFixed(
+          2
+        )} FCFA
+        <br /><br />
+        <input type="text" id="depositWithdrawalAmount" />&nbsp;&nbsp;
+        <button onclick="main.crediterDebiter(true)">Crediter</button>&nbsp;
+        <button onclick="main.crediterDebiter(false)">Debiter</button>&nbsp;
+      `;
+    Renderer.render(html);
+  }
+
+  crediterDebiter(deposit: boolean) {
+    let amountInput: HTMLInputElement = document.querySelector(
+      '#depositWithdrawalAmount'
+    );
+    let amountValue = +amountInput.value;
+
+    if (deposit) {
+      this.checkingAccount.crediter(amountValue);
+    } else {
+      this.checkingAccount.debiter(amountValue);
+    }
+    this.renderAccount();
+  }
 }
 
-const newObjet = new ClassObject();
+Renderer.appTemplate = document.querySelector('#appTemplate');
+const main = new Main();
 
-function functionObject() {
-  this.solde = 100000;
-}
-
-const functionObjt = new functionObject();
-
-const a = Object.create(objLiteral);
-
-const render = (function () {
-  const total = objLiteral.solde + newObjet.solde + functionObjt.solde;
-  document.querySelector('#appTemplate').innerHTML = `
-  
-  <h2> Bienvenu UBA Bank!</h2><br /><h5>Le solde de votre compte:</h5><br />
-    Object Literal Object Solde: ${objLiteral.solde} FCFA
-    <br />
-    Class Object solde: ${newObjet.solde} FCFA
-    <br />
-    Function Constructor Object Solde: ${functionObjt.solde} FCFA
-    <br />
-    Object.create() Object solde: $${a.solde} FCFA
-    <br /><br />
-    <strong>Total:</strong> ${total} FCFA
-  
-  
-  `;
-})();
+(<any>window).main = main;

@@ -1,27 +1,12 @@
 /** @format */
 
-class CheckingAccount {
-  private _solde: number = 0; //
-  public title: string;
+import BankAccount from './bank-account';
 
-  constructor(title: string) {
-    this.title = title;
-  }
+class CheckingAccount extends BankAccount {
+  accountType: string = 'Compte Courant';
 
-  public get solde(): number {
-    return this._solde;
-  }
-
-  set solde(somme) {
-    this._solde = somme;
-  }
-
-  crediter(somme: number) {
-    this._solde += somme;
-  }
-
-  debiter(somme: number) {
-    this._solde -= somme;
+  getAccountInfo() {
+    return {};
   }
 }
 

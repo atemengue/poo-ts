@@ -1,0 +1,17 @@
+html {
+  overflow-x: scroll;
+  overflow-y: hidden;
+}
+
+main {
+  position: relative;
+  padding-top: 20px;
+}
+
+.label {
+  font-weight: bold;
+}
+
+.navbar-brand {
+  color: white
+}

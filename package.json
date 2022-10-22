@@ -14,7 +14,8 @@
   "author": "regis atemengue",
   "license": "ISC",
   "dependencies": {
-    "lite-server": "^2.6.1"
+    "lite-server": "^2.6.1",
+    "ts-loader": "^9.4.1"
   },
   "devDependencies": {
     "tslint": "^6.1.3",

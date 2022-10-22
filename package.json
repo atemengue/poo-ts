@@ -1,0 +1,14 @@
+{
+  "name": "intro-poo-typescript",
+  "version": "1.0.0",
+  "description": "Introduction to TypeScript with POO",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "regis atemengue",
+  "license": "ISC",
+  "dependencies": {
+    "lite-server": "^2.6.1"
+  }
+}

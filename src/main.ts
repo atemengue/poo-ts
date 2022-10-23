@@ -1,40 +1,50 @@
 /** @format */
 
-// object literal
-const objLiteral = {
-  solde: 40000,
-};
+import CompteCourant from './scripts/compte-courant';
+import Renderer from './scripts/renderer';
 
-// creation d'un objet avec une classe
-class ClassObject {
-  solde = 1000;
+class Main {
+  public compteCourant: CompteCourant;
+
+  // 1 - creation des comptes bancaires
+  constructor() {
+    this.compteCourant = new CompteCourant('Jose Balla', 1000);
+    this.afficheCompte();
+  }
+
+  // 2 - Affichages des comptes bancaires;
+  afficheCompte() {
+    const html = `
+      <h2>Bienvenu UBA Bank!</h2>
+      <h3>Compte Courant</h3>
+      <br />
+      <span class="label">Client:</span> ${this.compteCourant.client}
+      <br />
+      <span class="label">Solde:</span> ${this.compteCourant.solde.toFixed(2)}
+      FCFA <br /><br />
+      <input type="text" id="sommeDepotRetrait" />&nbsp;&nbsp;
+      <button onclick="main.crediterEtDebiter(true)">Crediter</button>&nbsp;
+      <button onclick="main.crediterEtDebiter(false)">Debiter</button>&nbsp;
+      `;
+    Renderer.render(html);
+  }
+  // 3 - Crediter et Debiter les comptes bancaires
+  crediterEtDebiter(depot: boolean) {
+    let input: HTMLInputElement = document.querySelector('#sommeDepotRetrait');
+    let inputValue = parseInt(input.value);
+
+    if (depot) {
+      this.compteCourant.crediter(inputValue);
+    } else {
+      this.compteCourant.debiter(inputValue);
+    }
+
+    this.afficheCompte();
+  }
 }
 
-const newObjet = new ClassObject();
+Renderer.appTemplate = document.querySelector('#appTemplate');
 
-function functionObject() {
-  this.solde = 100000;
-}
+const main = new Main();
 
-const functionObjt = new functionObject();
-
-const a = Object.create(objLiteral);
-
-const render = (function () {
-  const total = objLiteral.solde + newObjet.solde + functionObjt.solde;
-  document.querySelector('#appTemplate').innerHTML = `
-  
-  <h2> Bienvenu UBA Bank!</h2><br /><h5>Le solde de votre compte:</h5><br />
-    Object Literal Object Solde: ${objLiteral.solde} FCFA
-    <br />
-    Class Object solde: ${newObjet.solde} FCFA
-    <br />
-    Function Constructor Object Solde: ${functionObjt.solde} FCFA
-    <br />
-    Object.create() Object solde: $${a.solde} FCFA
-    <br /><br />
-    <strong>Total:</strong> ${total} FCFA
-  
-  
-  `;
-})();
+(<any>window).main = main;

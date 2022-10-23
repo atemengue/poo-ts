@@ -1,0 +1,13 @@
+{
+  "checkingAccount": {
+    "id": 1,
+    "solde": 10000,
+    "title": "Regis Atemengue"
+  },
+  "savingsAccount": {
+    "id": 2,
+    "solde": 15000,
+    "title": "Regis Atemengue",
+    "interestRate": 2.5
+  }
+}

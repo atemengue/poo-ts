@@ -1,6 +1,7 @@
 /** @format */
 
 import { AccountList } from './scripts/account-list';
+import ATM from './scripts/atm';
 /** @format */
 
 import BankAccount from './scripts/bank-account';
@@ -18,27 +19,41 @@ class Main {
   public checkingAccount: CheckingAccount;
   public savingAccount: SavingAccount;
   public currentAccount: BankAccount;
+  public atm: ATM;
 
   // creation des comptes
-  constructor(private renderer: Renderer) {
-    this.checkingAccount = new CheckingAccount({
-      id: 1,
-      title: 'Jose Balla',
-      solde: 1000000,
-    });
+  constructor(private renderer: Renderer) {}
 
-    this.savingAccount = new SavingAccount({
-      id: 2,
-      title: 'Jose Balla',
-      solde: 200000,
-      interestRate: 2.5,
-    });
+  async loadAccount() {
+    const response = await fetch('./data.json');
+    const data = await response.json();
+    this.checkingAccount = new CheckingAccount({ ...data.checkingAccount });
+    this.savingAccount = new SavingAccount({ ...data.savingsAccount });
+    this.atm = new ATM(this.checkingAccount);
 
     let html = this.renderAccounts();
 
     this.renderer.render(
-      '<h2>Bienvenu UBA Bank!</h2><br /><h5>Votre compte:</h5><br />' + html
+      `<h2>Bienvenu UBA Bank!</h2><br />
+       <image src="src/images/acmebank.jpg" height="150">
+      <br/><br />
+      <h5>Votre compte:</h5><br />
+      ${html}`
     );
+  }
+
+  renderAtm() {
+    const html = `
+            <h3>ATM</h3>
+            <image src="src/images/atm.jpg" height="150">
+            <br /><br />
+            Current Checking Account Balance: ${this.savingAccount.solde} FCFA
+            <br /><br />
+            $<input type="text" id="depositWithdrawalAmount">&nbsp;&nbsp;
+            <button onclick="main.crediterDebiter(true, true)">Deposit</button>&nbsp;
+            <button onclick="main.crediterDebiter(false, true)">Withdrawal</button>&nbsp;
+        `;
+    this.renderer.render(html);
   }
 
   changeView(view?: string) {
@@ -49,6 +64,10 @@ class Main {
       case 'savings':
         this.currentAccount = this.savingAccount;
         break;
+      case 'atm':
+        this.currentAccount = this.savingAccount;
+        this.renderAtm();
+        return;
     }
     this.renderAccount(this.currentAccount);
   }
@@ -80,7 +99,7 @@ class Main {
     this.renderer.render(html);
   }
 
-  crediterDebiter(deposit: boolean) {
+  crediterDebiter(deposit: boolean, atm?: boolean) {
     let amountInput: HTMLInputElement = document.querySelector(
       '#depositWithdrawalAmount'
     );
@@ -89,9 +108,17 @@ class Main {
 
     try {
       if (deposit) {
-        this.currentAccount.crediter(amountValue);
+        if (atm) {
+          this.atm.crediter(amountValue);
+        } else {
+          this.currentAccount.crediter(amountValue);
+        }
       } else {
-        this.currentAccount.debiter(amountValue);
+        if (atm) {
+          this.atm.debiter(amountValue);
+        } else {
+          this.currentAccount.debiter(amountValue);
+        }
       }
     } catch (e) {
       error = e;
@@ -99,7 +126,9 @@ class Main {
 
     this.renderAccount(this.currentAccount);
 
+    atm ? this.renderAtm() : this.renderAccount(this.currentAccount);
     if (error) {
+      console.log(error);
       this.renderer.renderError(error.message);
     }
   }
@@ -107,6 +136,7 @@ class Main {
 
 const renderer = new Renderer(document.querySelector('#appTemplate'));
 const main = new Main(renderer);
+main.loadAccount();
 
 console.log(main);
 

@@ -1,10 +1,11 @@
 /** @format */
 
 import BankAccount from './bank-account';
-import { CreditEtDebit } from './interfaces';
+import { CreditEtDebit, Account } from './interfaces';
 
 class ATM implements CreditEtDebit {
   constructor(private account: BankAccount) {}
+
   crediter(somme: number): void {
     this.account.crediter(somme);
   }

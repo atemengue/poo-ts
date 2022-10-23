@@ -98,3 +98,35 @@ accList.add(this.savingsAccount);
               >
             </li>
           </ul>
+
+
+
+    changeView(view?: string) {
+        switch (view) {
+            case 'checking':
+                this.currentAccount = this.checkingAccount;
+                break;
+            case 'savings':
+                this.currentAccount = this.savingsAccount;
+                break;
+            case 'atm':
+                this.currentAccount = this.checkingAccount;
+                this.renderAtm();
+                return;
+        }
+        this.renderAccount(this.currentAccount);
+    }
+
+    renderAtm() {
+        const html = `
+                <h3>ATM</h3>
+                <image src="src/images/atm.jpg" height="150">
+                <br /><br />
+                Current Checking Account Balance: $${this.checkingAccount.balance}
+                <br /><br />
+                $<input type="text" id="depositWithdrawalAmount">&nbsp;&nbsp;
+                <button onclick="main.depositWithDrawal(true, true)">Deposit</button>&nbsp;
+                <button onclick="main.depositWithDrawal(false, true)">Withdrawal</button>&nbsp;
+            `;
+        this.renderer.render(html);
+    }

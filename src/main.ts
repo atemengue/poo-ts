@@ -6,10 +6,12 @@ import CompteEpargne from './scripts/compte-epargne';
 import CompteBancaire from './scripts/compte-bancaire';
 import { TypeCompte } from './scripts/enums';
 import { Renderer } from './scripts/renderer';
+import ATM from './scripts/atm';
 class Main {
   public compteCourant: CompteCourant;
   public compteEpargne: CompteEpargne;
   public compteActuel: CompteBancaire;
+  public atm: ATM;
 
   // 1 - creation des comptes bancaires
   constructor(private renderer: Renderer) {
@@ -23,8 +25,10 @@ class Main {
       id: 100,
       client: 'Jose Balla',
       solde: 15000,
-      tauxInterest: 2.5,
+      tauxInteret: 2.5,
     });
+
+    this.atm = new ATM(this.compteCourant);
 
     let html = this.afficheComptes();
 
@@ -63,25 +67,48 @@ class Main {
     this.renderer.render(html);
   }
   // 3 - Crediter et Debiter les comptes bancaires
-  crediterEtDebiter(depot: boolean) {
+  crediterEtDebiter(depot: boolean, atm?: boolean) {
     let input: HTMLInputElement = document.querySelector('#sommeDepotRetrait');
     let inputValue = parseInt(input.value);
     let error;
 
     try {
       if (depot) {
-        this.compteActuel.crediter(inputValue);
+        if (atm) {
+          this.atm.crediter(inputValue);
+        } else {
+          this.compteActuel.crediter(inputValue);
+        }
       } else {
-        this.compteActuel.debiter(inputValue);
+        if (atm) {
+          this.atm.debiter(inputValue);
+        } else {
+          this.compteActuel.debiter(inputValue);
+        }
       }
     } catch (e) {
       error = e;
     }
-    this.afficheCompte(this.compteActuel);
+
+    atm ? this.afficheATM() : this.afficheCompte(this.compteActuel);
 
     if (error) {
       this.renderer.renderError(error.message);
     }
+  }
+
+  afficheATM() {
+    const html = `
+            <h3>ATM</h3>
+            <image src="src/images/atm.jpg" height="150">
+            <br /><br />
+            Votre compte Courant: ${this.compteCourant.solde} FCFA
+            <br /><br />
+            <input type="text" id="sommeDepotRetrait" /> FCFA &nbsp;&nbsp;
+            <button onclick="main.crediterEtDebiter(true, true)">Crediter</button>&nbsp;
+            <button onclick="main.crediterEtDebiter(false, true)">Debiter</button>&nbsp;
+        `;
+    this.renderer.render(html);
   }
 
   changeView(view?: string) {
@@ -92,6 +119,10 @@ class Main {
       case 'epargne':
         this.compteActuel = this.compteEpargne;
         break;
+      case 'atm':
+        this.compteActuel = this.compteCourant;
+        this.afficheATM();
+        return;
     }
     this.afficheCompte(this.compteActuel);
   }

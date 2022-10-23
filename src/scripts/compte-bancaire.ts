@@ -1,15 +1,17 @@
 /** @format */
 
+import { IParametresCompte } from './interface';
+import { ICompte } from './interface';
 import { TypeCompte } from './enums';
 
-abstract class CompteBancaire {
+abstract class CompteBancaire implements ICompte {
   private _solde: number;
   id: number;
   public client: string;
 
   abstract typeCompte: TypeCompte;
 
-  constructor(parametresCompte: any) {
+  constructor(parametresCompte: IParametresCompte) {
     this.id = parametresCompte.id;
     this.client = parametresCompte.client;
     this._solde = parametresCompte.solde;

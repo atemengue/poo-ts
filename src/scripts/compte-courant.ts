@@ -1,28 +1,13 @@
 /** @format */
 
-class CompteCourant {
-  private _solde: number;
-  public client: string;
+import CompteBancaire from './compte-bancaire';
+import { TypeCompte } from './enums';
 
-  constructor(client: string, solde: number) {
-    this.client = client;
-    this._solde = solde;
-  }
+class CompteCourant extends CompteBancaire {
+  typeCompte = TypeCompte.Courant;
 
-  get solde(): number {
-    return this._solde;
-  }
-
-  set solde(valeur) {
-    this._solde = valeur;
-  }
-
-  crediter(somme: number) {
-    this.solde += somme;
-  }
-
-  debiter(somme: number) {
-    this.solde -= somme;
+  constructor(parametresCompte: any) {
+    super(parametresCompte);
   }
 }
 

@@ -1,13 +1,16 @@
 /** @format */
 
-class Renderer {
-  private constructor() {}
+export class Renderer {
+  constructor(private appTemplate: HTMLDivElement) {
+    this.appTemplate.innerHTML =
+      '<h2>Bienvenu a UBA BANK!</h2><br /><h5>Votre Compte:</h5><br />';
+  }
 
-  static appTemplate: HTMLDivElement;
+  render(html: string) {
+    this.appTemplate.innerHTML = html;
+  }
 
-  static render(html: string) {
-    Renderer.appTemplate.innerHTML = html;
+  renderError(message: string) {
+    this.appTemplate.innerHTML += `<br /><br /><div class="alert alert-danger">${message}</div>`;
   }
 }
-
-export default Renderer;

@@ -5,7 +5,7 @@ import CompteBancaire from './compte-bancaire';
 class CompteEpargne extends CompteBancaire {
   public tauxInteret: number;
 
-  typeCompte: string = 'Epargne';
+  typeCompte: string = 'epargne';
 
   constructor(parametresComptes: any) {
     super(parametresComptes);
@@ -17,6 +17,11 @@ class CompteEpargne extends CompteBancaire {
   crediter(somme: number): void {
     let montant = somme + (somme * this.tauxInteret) / 100;
     this.solde += montant;
+  }
+
+  transfererArgent(somme: number, compte: CompteBancaire) {
+    this.debiter(somme);
+    compte.crediter(somme);
   }
 }
 

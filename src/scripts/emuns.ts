@@ -1,6 +1,6 @@
 /** @format */
 
 export enum TypeCompte {
-  Courant,
-  Epargne,
+  courant,
+  epargne,
 }

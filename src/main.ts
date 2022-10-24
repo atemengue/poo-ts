@@ -4,11 +4,13 @@ import { ListComptes } from './scripts/ListComptes';
 import CompteCourant from './scripts/compte-courant';
 import CompteEpargne from './scripts/compte-epargne';
 import CompteBancaire from './scripts/compte-bancaire';
-import { TypeCompte } from './scripts/emuns';
 import Renderer from './scripts/renderer';
+import ATM from './scripts/atm';
 class Main {
   public compteCourant: CompteCourant;
   public compteEpargne: CompteEpargne;
+  public compteTransaction: CompteBancaire;
+  public atm: ATM;
 
   // creation compte actuel/ en cours de traitement;
 
@@ -16,18 +18,19 @@ class Main {
   constructor(private renderer: Renderer) {
     this.compteCourant = new CompteCourant({
       id: 1,
-      client: 'Jose Balla',
+      nomClient: 'Jose Balla',
       solde: 10000,
     });
 
     this.compteEpargne = new CompteEpargne({
       id: 100,
-      client: 'Jose Balla',
+      nomClient: 'Jose Balla',
       solde: 15000,
       tauxInteret: 2.5,
     });
 
     // ATM instanciaction de L'ATM
+    this.atm = new ATM(this.compteEpargne);
 
     let html = this.afficheComptes();
 
@@ -48,8 +51,17 @@ class Main {
     return acctsHtml;
   }
 
+  transfert() {
+    let input: HTMLInputElement = document.querySelector('#sommeDepotRetrait');
+    let somme = parseInt(input.value);
+
+    this.compteCourant.transfererArgent(somme, this.compteEpargne);
+
+    this.afficheCompte(this.compteTransaction);
+  }
+
   afficheCompte(compte: CompteBancaire) {
-    const typeCompte = TypeCompte[compte.typeCompte];
+    const typeCompte = compte.typeCompte;
     const html = `
       <h2></h2>
       <h3>Compte ${typeCompte}</h3>
@@ -65,6 +77,7 @@ class Main {
       <input type="text" id="sommeDepotRetrait" />&nbsp;&nbsp;
       <button onclick="main.crediterEtDebiter(true)">Crediter</button>&nbsp;
       <button onclick="main.crediterEtDebiter(false)">Debiter</button>&nbsp;
+      <button onclick="main.transfert()">Transferer argent</button>&nbsp;
       `;
     this.renderer.render(html);
   }
@@ -75,29 +88,29 @@ class Main {
     let inputValue = parseInt(input.value);
     let error;
 
-    // try {
-    //   if (depot) {
-    //     if (atm) {
-    //       this.atm.crediter(inputValue);
-    //     } else {
-    //       this.compteActuel.crediter(inputValue);
-    //     }
-    //   } else {
-    //     if (atm) {
-    //       this.atm.debiter(inputValue);
-    //     } else {
-    //       this.compteActuel.debiter(inputValue);
-    //     }
-    //   }
-    // } catch (e) {
-    //   error = e;
-    // }
+    try {
+      if (depot) {
+        if (atm) {
+          this.atm.crediter(inputValue);
+        } else {
+          this.compteTransaction.crediter(inputValue);
+        }
+      } else {
+        if (atm) {
+          this.atm.debiter(inputValue);
+        } else {
+          this.compteTransaction.debiter(inputValue);
+        }
+      }
+    } catch (e) {
+      error = e;
+    }
 
-    // atm ? this.afficheATM() : this.afficheCompte(this.compteActuel);
+    atm ? this.afficheATM() : this.afficheCompte(this.compteTransaction);
 
-    // if (error) {
-    //   this.renderer.renderError(error.message);
-    // }
+    if (error) {
+      this.renderer.renderError(error.message);
+    }
   }
 
   afficheATM() {
@@ -105,7 +118,7 @@ class Main {
             <h3>ATM</h3>
             <image src="src/images/atm.jpg" height="150">
             <br /><br />
-            Votre compte Courant: ${this.compteCourant.solde} FCFA
+            Votre compte Courant: ${this.compteEpargne.solde} FCFA
             <br /><br />
             <input type="text" id="sommeDepotRetrait" /> FCFA &nbsp;&nbsp;
             <button onclick="main.crediterEtDebiter(true, true)">Crediter</button>&nbsp;
@@ -114,24 +127,25 @@ class Main {
     this.renderer.render(html);
   }
 
-  // changeView(view?: string) {
-  //   switch (view) {
-  //     case 'courant':
-  //       this.compteActuel = this.compteCourant;
-  //       break;
-  //     case 'epargne':
-  //       this.compteActuel = this.compteEpargne;
-  //       break;
-  //     case 'atm':
-  //       this.compteActuel = this.compteCourant;
-  //       this.afficheATM();
-  //       return;
-  //   }
-  //   this.afficheCompte(this.compteActuel);
-  // }
+  changeView(view?: string) {
+    switch (view) {
+      case 'courant':
+        this.compteTransaction = this.compteCourant;
+        break;
+      case 'epargne':
+        this.compteTransaction = this.compteEpargne;
+        break;
+      case 'atm':
+        this.compteTransaction = this.compteCourant;
+        this.afficheATM();
+        return;
+    }
+    this.afficheCompte(this.compteTransaction);
+  }
 }
 
 const renderer = new Renderer(document.querySelector('#appTemplate'));
 const main = new Main(renderer);
 
+// renderer API main disponible dans l'app
 (<any>window).main = main;

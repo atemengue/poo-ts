@@ -1,40 +1,56 @@
 /** @format */
+import CompteCourant from './scripts/compte-courant';
+import Renderer from './scripts/renderer';
 
-// object literal
-const objLiteral = {
-  solde: 40000,
-};
+// creation d'une instance d' un compte
 
-// creation d'un objet avec une classe
-class ClassObject {
-  solde = 1000;
+class Main {
+  // proprietes de la classe
+  public compteCourant: CompteCourant;
+
+  // constructeur
+  constructor() {
+    this.compteCourant = new CompteCourant('Antoine Junoir');
+    this.afficheCompte();
+  }
+
+  // Affiche les comptes
+  afficheCompte() {
+    const html = (document.querySelector('#appTemplate').innerHTML = `
+    <h2> Bienvenu UBA Bank!</h2><br /><h5>Le solde de votre compte:</h5><br />
+      Nom du client 1: ${this.compteCourant.nomClient}
+      <br />
+      Solde du client: ${this.compteCourant.solde.toFixed(2)}
+
+      <br /><br />
+      
+      <input type="text" id="creditEtDebit" />&nbsp;&nbsp;
+      <button onclick="main.crediterDebiter(true)">Crediter</button>&nbsp;
+      <button onclick="main.crediterDebiter(false)">Debiter</button>&nbsp;
+      
+
+    `);
+
+    Renderer.render(html);
+  }
+  // debiter et crediter des comptes
+
+  crediterDebiter(credit: boolean) {
+    const input: HTMLInputElement = document.querySelector('#creditEtDebit');
+    const valeurInput = parseInt(input.value);
+
+    if (credit) {
+      this.compteCourant.crediter(valeurInput);
+    } else {
+      this.compteCourant.debiter(valeurInput);
+    }
+
+    this.afficheCompte();
+  }
 }
 
-const newObjet = new ClassObject();
+Renderer.appTemplate = document.querySelector('#appTemplate');
+const main = new Main();
 
-function functionObject() {
-  this.solde = 100000;
-}
-
-const functionObjt = new functionObject();
-
-const a = Object.create(objLiteral);
-
-const render = (function () {
-  const total = objLiteral.solde + newObjet.solde + functionObjt.solde;
-  document.querySelector('#appTemplate').innerHTML = `
-  
-  <h2> Bienvenu UBA Bank!</h2><br /><h5>Le solde de votre compte:</h5><br />
-    Object Literal Object Solde: ${objLiteral.solde} FCFA
-    <br />
-    Class Object solde: ${newObjet.solde} FCFA
-    <br />
-    Function Constructor Object Solde: ${functionObjt.solde} FCFA
-    <br />
-    Object.create() Object solde: $${a.solde} FCFA
-    <br /><br />
-    <strong>Total:</strong> ${total} FCFA
-  
-  
-  `;
-})();
+// exposer l'API du main dans la page web
+(<any>window).main = main;

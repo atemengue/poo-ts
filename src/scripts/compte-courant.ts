@@ -1,35 +1,13 @@
 /** @format */
 
-class CompteCourant {
-  // proprietes
-  private _solde: number = 0;
+import CompteBancaire from './compte-bancaire';
+import { TypeCompte } from './emuns';
 
-  public nomClient: string;
+class CompteCourant extends CompteBancaire {
+  public typeCompte: string = 'Epargne';
 
-  // constructeur avec des propriets
-  constructor(nomClient: string) {
-    this.nomClient = nomClient;
-  }
-
-  // getters et setters
-  public get solde(): number {
-    return this._solde;
-  }
-
-  public set solde(valeur: number) {
-    this._solde = valeur;
-  }
-  // methodes
-
-  debiter(somme: number) {
-    if (somme < this._solde) {
-      this._solde -= somme;
-    } else {
-      throw Error('la solde debiteur est inferieur');
-    }
-  }
-  crediter(somme: number) {
-    this._solde += somme;
+  infoCompte() {
+    return {};
   }
 }
 

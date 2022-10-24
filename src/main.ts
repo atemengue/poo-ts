@@ -1,5 +1,6 @@
 /** @format */
 import CompteCourant from './scripts/compte-courant';
+import CompteEpargne from './scripts/compte-epargne';
 import Renderer from './scripts/renderer';
 
 // creation d'une instance d' un compte
@@ -7,10 +8,16 @@ import Renderer from './scripts/renderer';
 class Main {
   // proprietes de la classe
   public compteCourant: CompteCourant;
+  public compteEpargne: CompteEpargne;
 
   // constructeur
   constructor() {
-    this.compteCourant = new CompteCourant('Antoine Junoir');
+    this.compteEpargne = new CompteEpargne({
+      id: 1,
+      nomClient: 'Antoine Junoir',
+      solde: 2000,
+      tauxInteret: 2.5,
+    });
     this.afficheCompte();
   }
 
@@ -18,9 +25,11 @@ class Main {
   afficheCompte() {
     const html = (document.querySelector('#appTemplate').innerHTML = `
     <h2> Bienvenu UBA Bank!</h2><br /><h5>Le solde de votre compte:</h5><br />
-      Nom du client 1: ${this.compteCourant.nomClient}
+
+      <h3>Type de Compte: Epargne</h3>
+      Nom du client: ${this.compteEpargne.nomClient}
       <br />
-      Solde du client: ${this.compteCourant.solde.toFixed(2)}
+      Solde du client: ${this.compteEpargne.solde.toFixed(2)}
 
       <br /><br />
       
@@ -40,9 +49,9 @@ class Main {
     const valeurInput = parseInt(input.value);
 
     if (credit) {
-      this.compteCourant.crediter(valeurInput);
+      this.compteEpargne.crediter(valeurInput);
     } else {
-      this.compteCourant.debiter(valeurInput);
+      this.compteEpargne.debiter(valeurInput);
     }
 
     this.afficheCompte();

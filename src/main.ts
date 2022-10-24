@@ -33,7 +33,7 @@ class Main {
     let html = this.afficheComptes();
 
     this.renderer.render(
-      '<h2>Bienvenu a la banque!</h2><br /><h5>Votre Compte:</h5><br />' + html
+      '<h2>Bienvenu a UBA BANK!</h2><br /><h5>Vos Comptes:</h5><br />' + html
     );
   }
 
@@ -50,16 +50,19 @@ class Main {
   }
 
   afficheCompte(compte: CompteBancaire) {
-    console.log(compte);
     const typeCompte = TypeCompte[compte.typeCompte];
     const html = `
       <h2></h2>
       <h3>Compte ${typeCompte}</h3>
       <br />
+      <image src="src/images/${typeCompte}.jpg" heigt="150">
+      <div>
       <span class="label">Client:</span> ${compte.client}
       <br />
       <span class="label">Solde:</span> ${compte.solde.toFixed(2)}
-      FCFA <br /><br />
+      FCFA 
+      </div>
+      <br /><br />
       <input type="text" id="sommeDepotRetrait" />&nbsp;&nbsp;
       <button onclick="main.crediterEtDebiter(true)">Crediter</button>&nbsp;
       <button onclick="main.crediterEtDebiter(false)">Debiter</button>&nbsp;

@@ -1,13 +1,19 @@
 /** @format */
 
+import { TypeCompte } from './emuns';
+/** @format */
+
+import { IParametresCompte } from './interfaces';
+/** @format */
+
 import CompteBancaire from './compte-bancaire';
 
 class CompteEpargne extends CompteBancaire {
   public tauxInteret: number;
 
-  typeCompte: string = 'Epargne';
+  typeCompte: string = 'epargne';
 
-  constructor(parametresComptes: any) {
+  constructor(parametresComptes: IParametresCompte) {
     super(parametresComptes);
     this.tauxInteret = parametresComptes.tauxInteret;
   }

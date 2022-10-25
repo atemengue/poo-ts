@@ -1,8 +1,9 @@
 /** @format */
 
-import { TypeCompte } from './emuns';
+import { IParametresCompte } from './interfaces';
+import { ICompteBancaire } from './interfaces';
 
-abstract class CompteBancaire {
+abstract class CompteBancaire implements ICompteBancaire {
   // proprietes
   private _solde: number = 0;
   public id: number;
@@ -13,7 +14,7 @@ abstract class CompteBancaire {
   public tauxInteret?: number;
 
   // constructeur avec des propriets
-  constructor(parametresComptes: any) {
+  constructor(parametresComptes: IParametresCompte) {
     this.id = parametresComptes.id;
     this._solde = parametresComptes.solde;
     this.nomClient = parametresComptes.nomClient;

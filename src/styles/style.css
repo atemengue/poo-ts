@@ -12,6 +12,6 @@ main {
   font-weight: bold;
 }
 
-.navbar-brand {
+.navbar-brand, .nav-link {
   color: white
 }
